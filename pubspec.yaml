@@ -1,0 +1,72 @@
+name: islamic_app
+description: A complete Islamic mobile application with Quran, Hadith, Qibla, and Prayer features.
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management
+  get: ^4.6.6
+
+  # Local Storage
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  shared_preferences: ^2.2.2
+
+  # Network
+  http: ^1.2.0
+  dio: ^5.4.1
+  connectivity_plus: ^7.0.0
+
+  # UI
+  cupertino_icons: ^1.0.6
+  flutter_svg: ^2.0.9
+  google_fonts: ^8.0.1
+  shimmer: ^3.0.0
+  lottie: ^3.3.2
+  cached_network_image: ^3.3.1
+  flutter_screenutil: ^5.9.0
+  scrollable_positioned_list: ^0.3.8
+
+  # Qibla & Sensors
+  flutter_qiblah: ^3.2.0
+  flutter_compass_v2: ^1.0.3
+  geolocator: ^14.0.2
+  permission_handler: ^12.0.1
+
+  # Notifications & Alarm
+  flutter_local_notifications: ^20.0.0
+  timezone: ^0.10.0
+  android_alarm_manager_plus: ^5.0.0
+
+  # Utilities
+  intl: ^0.20.2
+  hijri: ^3.0.0
+  flutter_tts: ^4.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.7
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/fonts/
+
+  fonts:
+    - family: Amiri
+      fonts:
+        - asset: assets/fonts/Amiri-Regular.ttf
+        - asset: assets/fonts/Amiri-Bold.ttf
+          weight: 700
