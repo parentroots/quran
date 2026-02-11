@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 import 'app/core/theme/app_theme.dart';
+import 'app/core/bindings/app_binding.dart';
 import 'app/routes/app_pages.dart';
 import 'app/services/notification_service.dart';
 import 'app/services/storage_service.dart';
@@ -59,7 +60,8 @@ class MyApp extends StatelessWidget {
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: ThemeMode.system,
-          initialRoute: AppPages.INITIAL,
+          initialBinding: AppBinding(),
+          initialRoute: AppPages.initial,
           getPages: AppPages.routes,
           defaultTransition: Transition.cupertino,
         );

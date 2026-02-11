@@ -1,101 +1,109 @@
 import 'package:get/get.dart';
+
+// Route names
+import 'app_route_names.dart';
+
+// Views
 import '../modules/home/views/home_view.dart';
-import '../modules/home/bindings/home_binding.dart';
 import '../modules/quran/views/quran_view.dart';
 import '../modules/quran/views/surah_detail_view.dart';
-import '../modules/quran/bindings/quran_binding.dart';
 import '../modules/hadith/views/hadith_view.dart';
 import '../modules/hadith/views/hadith_detail_view.dart';
-import '../modules/hadith/bindings/hadith_binding.dart';
 import '../modules/qibla/views/qibla_view.dart';
-import '../modules/qibla/bindings/qibla_binding.dart';
 import '../modules/prayer/views/prayer_view.dart';
-import '../modules/prayer/bindings/prayer_binding.dart';
 import '../modules/settings/views/settings_view.dart';
-import '../modules/settings/bindings/settings_binding.dart';
 import '../modules/tasbeeh/views/tasbeeh_view.dart';
-import '../modules/tasbeeh/bindings/tasbeeh_binding.dart';
 import '../modules/dua/views/dua_view.dart';
-import '../modules/dua/bindings/dua_binding.dart';
 import '../modules/zakat/views/zakat_view.dart';
-import '../modules/zakat/bindings/zakat_binding.dart';
-import '../modules/names/views/names_view.dart';
-import '../modules/names/bindings/names_binding.dart';
+import '../modules/names/view/name_view.dart';
 import '../modules/calendar/views/calendar_view.dart';
-import '../modules/calendar/bindings/calendar_binding.dart';
 
-part 'app_routes.dart';
-
+/// Application pages configuration
+/// Defines all routes and their corresponding pages
+/// Dependencies are managed centrally via AppBinding
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.HOME;
+  /// Initial route when app starts
+  static const String initial = AppRouteNames.home;
 
-  static final routes = [
+  /// All application routes
+  static final List<GetPage> routes = [
+    // Home
     GetPage(
-      name: _Paths.HOME,
+      name: AppRouteNames.home,
       page: () => const HomeView(),
-      binding: HomeBinding(),
+      transition: Transition.fadeIn,
     ),
+
+    // Quran
     GetPage(
-      name: _Paths.QURAN,
+      name: AppRouteNames.quran,
       page: () => const QuranView(),
-      binding: QuranBinding(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
-      name: _Paths.SURAH_DETAIL,
+      name: AppRouteNames.surahDetail,
       page: () => SurahDetailView(),
-      binding: QuranBinding(),
+      transition: Transition.rightToLeft,
     ),
+
+    // Hadith
     GetPage(
-      name: _Paths.HADITH,
+      name: AppRouteNames.hadith,
       page: () => const HadithView(),
-      binding: HadithBinding(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
-      name: _Paths.HADITH_DETAIL,
+      name: AppRouteNames.hadithDetail,
       page: () => const HadithDetailView(),
-      binding: HadithBinding(),
+      transition: Transition.rightToLeft,
     ),
+
+    // Prayer & Qibla
     GetPage(
-      name: _Paths.QIBLA,
-      page: () => const QiblaView(),
-      binding: QiblaBinding(),
-    ),
-    GetPage(
-      name: _Paths.PRAYER,
+      name: AppRouteNames.prayer,
       page: () => const PrayerView(),
-      binding: PrayerBinding(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
-      name: _Paths.SETTINGS,
-      page: () => const SettingsView(),
-      binding: SettingsBinding(),
+      name: AppRouteNames.qibla,
+      page: () => const QiblaView(),
+      transition: Transition.rightToLeft,
     ),
+
+    // Islamic Tools
     GetPage(
-      name: _Paths.TASBEEH,
+      name: AppRouteNames.tasbeeh,
       page: () => const TasbeehView(),
-      binding: TasbeehBinding(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
-      name: _Paths.DUA,
+      name: AppRouteNames.dua,
       page: () => const DuaView(),
-      binding: DuaBinding(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
-      name: _Paths.ZAKAT,
+      name: AppRouteNames.zakat,
       page: () => const ZakatView(),
-      binding: ZakatBinding(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
-      name: _Paths.NAMES,
+      name: AppRouteNames.names,
       page: () => const NamesView(),
-      binding: NamesBinding(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
-      name: _Paths.CALENDAR,
+      name: AppRouteNames.calendar,
       page: () => const CalendarView(),
-      binding: CalendarBinding(),
+      transition: Transition.rightToLeft,
+    ),
+
+    // Settings
+    GetPage(
+      name: AppRouteNames.settings,
+      page: () => const SettingsView(),
+      transition: Transition.rightToLeft,
     ),
   ];
 }
