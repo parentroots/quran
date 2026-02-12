@@ -5,12 +5,17 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
-import 'app/core/theme/app_theme.dart';
-import 'app/core/bindings/dependency_injection.dart';
-import 'app/routes/app_pages.dart';
-import 'app/services/notification_service.dart';
-import 'app/services/storage_service.dart';
-import 'app/services/api_service.dart';
+import 'ui/theme/app_theme.dart';
+import 'core/di/dependency_injection.dart';
+import 'routes/app_pages.dart';
+import 'services/notification_service.dart';
+import 'core/storage/local_storage.dart';
+import 'services/location_service.dart';
+import 'services/tts_service.dart';
+import 'services/prayer_service.dart';
+import 'services/zakat_service.dart';
+import 'services/data_service.dart';
+import 'core/network/api_service.dart' as network;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,14 +39,17 @@ void main() async {
 }
 
 Future<void> initServices() async {
-  // Initialize ApiService first since others might depend on it
-  await Get.putAsync(() => ApiService().init());
+  // Initialize generic ApiService
+  await network.ApiService.init();
 
-  // Initialize Storage Service
-  await Get.putAsync(() => StorageService().init());
-
-  // Initialize Notification Service
+  // Initialize Services
+  await Get.putAsync(() => DataService().init());
+  await Get.putAsync(() => LocalStorage().init());
   await Get.putAsync(() => NotificationService().init());
+  await Get.putAsync(() => LocationService().init());
+  await Get.putAsync(() => TtsService().init());
+  await Get.putAsync(() => PrayerService().init());
+  await Get.putAsync(() => ZakatService().init());
 }
 
 class MyApp extends StatelessWidget {
