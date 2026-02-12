@@ -3,8 +3,21 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../controllers/zakat_controller.dart';
 
-class ZakatView extends GetView<ZakatController> {
+class ZakatView extends StatefulWidget {
   const ZakatView({super.key});
+
+  @override
+  State<ZakatView> createState() => _ZakatViewState();
+}
+
+class _ZakatViewState extends State<ZakatView> {
+  late final ZakatController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = ZakatController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,58 +25,83 @@ class ZakatView extends GetView<ZakatController> {
       appBar: AppBar(
         title: const Text('যাকাত ক্যালকুলেটর'),
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(20.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'আপনার সম্পদের হিসাব দিন',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Theme.of(context).primaryColor,
-                  ),
-            ),
-            SizedBox(height: 20.h),
-            _buildInputField(
-              'স্বর্ণের মূল্য',
-              (val) => controller.goldValue.value = double.tryParse(val) ?? 0,
-            ),
-            _buildInputField(
-              'রুপার মূল্য',
-              (val) => controller.silverValue.value = double.tryParse(val) ?? 0,
-            ),
-            _buildInputField(
-              'নগদ টাকা',
-              (val) => controller.cashValue.value = double.tryParse(val) ?? 0,
-            ),
-            _buildInputField(
-              'ব্যাংকে জমানো টাকা',
-              (val) => controller.bankSavings.value = double.tryParse(val) ?? 0,
-            ),
-            _buildInputField(
-              'ব্যবসায়িক সম্পদ',
-              (val) =>
-                  controller.businessAssets.value = double.tryParse(val) ?? 0,
-            ),
-            _buildInputField(
-              'ঋণ (বিয়োগ হবে)',
-              (val) => controller.debts.value = double.tryParse(val) ?? 0,
-              isDebt: true,
-            ),
-            SizedBox(height: 30.h),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () => controller.calculateZakat(),
-                child: const Text('হিসাব করুন'),
+      body: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(24.w),
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(30.r),
+                bottomRight: Radius.circular(30.r),
               ),
             ),
-            SizedBox(height: 30.h),
-            Obx(() => controller.totalAssets.value > 0
-                ? _buildResultCard(context)
-                : const SizedBox.shrink()),
-          ],
-        ),
+            child: Column(
+              children: [
+                Text(
+                  'আপনার সম্পদের হিসাব দিন',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(20.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildInputField(
+                    'স্বর্ণের মূল্য',
+                    (val) =>
+                        controller.goldValue.value = double.tryParse(val) ?? 0,
+                  ),
+                  _buildInputField(
+                    'রুপার মূল্য',
+                    (val) => controller.silverValue.value =
+                        double.tryParse(val) ?? 0,
+                  ),
+                  _buildInputField(
+                    'নগদ টাকা',
+                    (val) =>
+                        controller.cashValue.value = double.tryParse(val) ?? 0,
+                  ),
+                  _buildInputField(
+                    'ব্যাংকে জমানো টাকা',
+                    (val) => controller.bankSavings.value =
+                        double.tryParse(val) ?? 0,
+                  ),
+                  _buildInputField(
+                    'ব্যবসায়িক সম্পদ',
+                    (val) => controller.businessAssets.value =
+                        double.tryParse(val) ?? 0,
+                  ),
+                  _buildInputField(
+                    'ঋণ (বিয়োগ হবে)',
+                    (val) => controller.debts.value = double.tryParse(val) ?? 0,
+                    isDebt: true,
+                  ),
+                  SizedBox(height: 30.h),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => controller.calculateZakat(),
+                      child: const Text('হিসাব করুন'),
+                    ),
+                  ),
+                  SizedBox(height: 30.h),
+                  Obx(() => controller.totalAssets.value > 0
+                      ? _buildResultCard(context)
+                      : const SizedBox.shrink()),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

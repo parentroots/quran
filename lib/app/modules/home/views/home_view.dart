@@ -9,8 +9,22 @@ import '../../qibla/views/qibla_view.dart';
 import '../../prayer/views/prayer_view.dart';
 import '../../settings/views/settings_view.dart';
 
-class HomeView extends GetView<HomeController> {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  late final HomeController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = HomeController();
+    controller.onInit();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,8 +132,25 @@ class HomeView extends GetView<HomeController> {
   }
 }
 
-class HomeDashboard extends GetView<HomeController> {
+class HomeDashboard extends StatefulWidget {
   const HomeDashboard({super.key});
+
+  @override
+  State<HomeDashboard> createState() => _HomeDashboardState();
+}
+
+class _HomeDashboardState extends State<HomeDashboard> {
+  late final HomeController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = HomeController();
+    controller.onInit();
+
+    // Refresh last read whenever the tab changes to Home
+    ever(controller.currentIndex, (_) => controller.loadLastRead());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +178,7 @@ class HomeDashboard extends GetView<HomeController> {
                 if (lastRead != null) {
                   return _buildContinueReadingCard(context, lastRead);
                 }
-                return const SizedBox.shrink();
+                return _buildEmptyLastReadCard(context);
               }),
 
               SizedBox(height: 24.h),
@@ -253,6 +284,64 @@ class HomeDashboard extends GetView<HomeController> {
     );
   }
 
+  Widget _buildEmptyLastReadCard(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(20.w),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(
+          color: Theme.of(context).dividerColor,
+          width: 1,
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: EdgeInsets.all(12.w),
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12.r),
+            ),
+            child: Icon(
+              Icons.menu_book_outlined,
+              color: Theme.of(context).primaryColor,
+              size: 32.sp,
+            ),
+          ),
+          SizedBox(width: 16.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'আপনি এখনও কিছু পড়েননি',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  'কুরআন পড়া শুরু করতে এখানে চাপুন',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
+            ),
+          ),
+          IconButton(
+            onPressed: () => controller.changeTab(1),
+            icon: Icon(
+              Icons.arrow_forward_ios,
+              size: 16.sp,
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildContinueReadingCard(BuildContext context, dynamic lastRead) {
     return GestureDetector(
       onTap: () {
@@ -269,66 +358,98 @@ class HomeDashboard extends GetView<HomeController> {
         padding: EdgeInsets.all(20.w),
         decoration: BoxDecoration(
           gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
             colors: [
-              Theme.of(context).colorScheme.secondary,
-              Theme.of(context).colorScheme.secondary.withOpacity(0.7),
+              Theme.of(context).primaryColor,
+              Theme.of(context).primaryColor.withOpacity(0.8),
             ],
           ),
           borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).colorScheme.secondary.withOpacity(0.3),
+              color: Theme.of(context).primaryColor.withOpacity(0.3),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
           ],
         ),
-        child: Row(
+        child: Stack(
           children: [
-            Container(
-              padding: EdgeInsets.all(12.w),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(12.r),
-              ),
+            Positioned(
+              right: -20,
+              bottom: -20,
               child: Icon(
-                Icons.bookmark,
-                color: Colors.white,
-                size: 32.sp,
+                Icons.menu_book,
+                size: 100.sp,
+                color: Colors.white.withOpacity(0.1),
               ),
             ),
-            SizedBox(width: 16.w),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'শেষ পাঠ',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.white70,
-                        ),
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(12.w),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12.r),
                   ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    lastRead.surahName,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  child: Icon(
+                    Icons.bookmark,
+                    color: Colors.white,
+                    size: 32.sp,
                   ),
-                  Text(
-                    'আয়াত ${lastRead.ayahNumber}',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Colors.white,
-                        ),
+                ),
+                SizedBox(width: 16.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.history,
+                              color: Colors.white70, size: 14.sp),
+                          SizedBox(width: 4.w),
+                          Text(
+                            'শেষ পাঠ',
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Colors.white70,
+                                    ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8.h),
+                      Text(
+                        lastRead.surahName,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22.sp,
+                            ),
+                      ),
+                      SizedBox(height: 2.h),
+                      Text(
+                        'আয়াত নং ${lastRead.ayahNumber}',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Colors.white.withOpacity(0.9),
+                            ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.white,
-              size: 20.sp,
+                ),
+                Container(
+                  padding: EdgeInsets.all(8.w),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.play_arrow,
+                    color: Theme.of(context).primaryColor,
+                    size: 20.sp,
+                  ),
+                ),
+              ],
             ),
           ],
         ),

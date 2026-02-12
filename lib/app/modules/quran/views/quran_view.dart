@@ -3,8 +3,22 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../controllers/quran_controller.dart';
 
-class QuranView extends GetView<QuranController> {
+class QuranView extends StatefulWidget {
   const QuranView({super.key});
+
+  @override
+  State<QuranView> createState() => _QuranViewState();
+}
+
+class _QuranViewState extends State<QuranView> {
+  late final QuranController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = QuranController();
+    controller.onInit();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -3,8 +3,22 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../controllers/prayer_controller.dart';
 
-class PrayerView extends GetView<PrayerController> {
+class PrayerView extends StatefulWidget {
   const PrayerView({super.key});
+
+  @override
+  State<PrayerView> createState() => _PrayerViewState();
+}
+
+class _PrayerViewState extends State<PrayerView> {
+  late final PrayerController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = PrayerController();
+    controller.onInit();
+  }
 
   @override
   Widget build(BuildContext context) {

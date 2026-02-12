@@ -4,8 +4,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import '../controllers/calendar_controller.dart';
 
-class CalendarView extends GetView<CalendarController> {
+class CalendarView extends StatefulWidget {
   const CalendarView({super.key});
+
+  @override
+  State<CalendarView> createState() => _CalendarViewState();
+}
+
+class _CalendarViewState extends State<CalendarView> {
+  late final CalendarController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = CalendarController();
+  }
 
   @override
   Widget build(BuildContext context) {

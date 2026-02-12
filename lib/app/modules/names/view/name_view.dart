@@ -3,8 +3,21 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../controllers/names_controller.dart';
 
-class NamesView extends GetView<NamesController> {
+class NamesView extends StatefulWidget {
   const NamesView({super.key});
+
+  @override
+  State<NamesView> createState() => _NamesViewState();
+}
+
+class _NamesViewState extends State<NamesView> {
+  late final NamesController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = NamesController();
+  }
 
   @override
   Widget build(BuildContext context) {

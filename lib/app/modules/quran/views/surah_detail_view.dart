@@ -5,20 +5,30 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../controllers/quran_controller.dart';
 import '../../../data/models/quran_model.dart';
 
-class SurahDetailView extends GetView<QuranController> {
-  SurahDetailView({super.key});
+class SurahDetailView extends StatefulWidget {
+  const SurahDetailView({super.key});
 
+  @override
+  State<SurahDetailView> createState() => _SurahDetailViewState();
+}
+
+class _SurahDetailViewState extends State<SurahDetailView> {
+  late final QuranController controller;
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
 
   @override
-  Widget build(BuildContext context) {
-    final Surah surah = Get.arguments['surah'];
-    final int? scrollToAyah = Get.arguments['scrollToAyah'];
+  void initState() {
+    super.initState();
+    controller = QuranController();
+    controller.onInit();
 
-    // Load ayahs when view is built
+    // Move initialization logic here to avoid redundant execution in build
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final Surah surah = Get.arguments['surah'];
+      final int? scrollToAyah = Get.arguments['scrollToAyah'];
+
       await controller.loadSurahAyahs(surah);
 
       if (scrollToAyah != null && scrollToAyah > 0) {
@@ -26,8 +36,7 @@ class SurahDetailView extends GetView<QuranController> {
         Future.delayed(const Duration(milliseconds: 300), () {
           if (itemScrollController.isAttached) {
             itemScrollController.scrollTo(
-              index:
-                  scrollToAyah, // index 0 is header, so index == scrollToAyah
+              index: scrollToAyah,
               duration: const Duration(seconds: 1),
               curve: Curves.easeInOutCubic,
             );
@@ -35,6 +44,11 @@ class SurahDetailView extends GetView<QuranController> {
         });
       }
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Surah surah = Get.arguments['surah'];
 
     return Scaffold(
       appBar: AppBar(

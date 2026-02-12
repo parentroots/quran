@@ -3,8 +3,22 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../controllers/dua_controller.dart';
 
-class DuaView extends GetView<DuaController> {
+class DuaView extends StatefulWidget {
   const DuaView({super.key});
+
+  @override
+  State<DuaView> createState() => _DuaViewState();
+}
+
+class _DuaViewState extends State<DuaView> {
+  late final DuaController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = DuaController();
+    controller.onInit();
+  }
 
   @override
   Widget build(BuildContext context) {

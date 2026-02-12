@@ -3,8 +3,22 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../controllers/tasbeeh_controller.dart';
 
-class TasbeehView extends GetView<TasbeehController> {
+class TasbeehView extends StatefulWidget {
   const TasbeehView({super.key});
+
+  @override
+  State<TasbeehView> createState() => _TasbeehViewState();
+}
+
+class _TasbeehViewState extends State<TasbeehView> {
+  late final TasbeehController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TasbeehController();
+    controller.onInit();
+  }
 
   @override
   Widget build(BuildContext context) {

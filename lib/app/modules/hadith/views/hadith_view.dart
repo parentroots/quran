@@ -3,8 +3,22 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../controllers/hadith_controller.dart';
 
-class HadithView extends GetView<HadithController> {
+class HadithView extends StatefulWidget {
   const HadithView({super.key});
+
+  @override
+  State<HadithView> createState() => _HadithViewState();
+}
+
+class _HadithViewState extends State<HadithView> {
+  late final HadithController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = HadithController();
+    controller.onInit();
+  }
 
   @override
   Widget build(BuildContext context) {

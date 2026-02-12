@@ -17,6 +17,13 @@ class QiblaController extends GetxController {
   final RxDouble userLatitude = 0.0.obs;
   final RxDouble userLongitude = 0.0.obs;
 
+  // Formatted coordinate strings for UI
+  String get latString =>
+      userLatitude.value == 0.0 ? '---' : userLatitude.value.toStringAsFixed(4);
+  String get lngString => userLongitude.value == 0.0
+      ? '---'
+      : userLongitude.value.toStringAsFixed(4);
+
   StreamSubscription<CompassEvent>? _compassSubscription;
 
   // Kaaba coordinates
@@ -54,49 +61,53 @@ class QiblaController extends GetxController {
       hasPermission.value = locationStatus.isGranted;
 
       if (!hasPermission.value) {
-        errorMessage.value = 'অবস্থান অনুমতি প্রয়োজন';
+        errorMessage.value = 'লোকেশন অনুমতি প্রয়োজন';
+      } else {
+        errorMessage.value = '';
       }
     } catch (e) {
-      errorMessage.value = 'অনুমতি চেক করতে ত্রুটি: ${e.toString()}';
-      print('Error checking permissions: $e');
+      errorMessage.value = 'ত্রুটি: ${e.toString()}';
     }
   }
 
   Future<void> getUserLocation() async {
+    if (isLoading.value) return;
+
     try {
       isLoading.value = true;
+      errorMessage.value = '';
 
-      // Try to get cached location first
-      final cachedLocation = _storageService.getLocation();
-      if (cachedLocation != null) {
-        userLatitude.value = cachedLocation['latitude']!;
-        userLongitude.value = cachedLocation['longitude']!;
-        calculateQiblaDirection();
-        isLoading.value = false;
-        return;
-      }
-
-      // Get current position
+      // Get current position (Skip cached check for "Refresh" accuracy)
       Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
+        desiredAccuracy: LocationAccuracy.medium,
+        timeLimit: const Duration(seconds: 10),
       );
 
       userLatitude.value = position.latitude;
       userLongitude.value = position.longitude;
 
-      // Cache location
+      // Cache location for other services
       await _storageService.saveLocation(position.latitude, position.longitude);
 
       calculateQiblaDirection();
     } catch (e) {
-      errorMessage.value = 'অবস্থান পেতে ত্রুটি: ${e.toString()}';
-      print('Error getting location: $e');
+      // If fails, try to get cached location
+      final cachedLocation = _storageService.getLocation();
+      if (cachedLocation != null) {
+        userLatitude.value = cachedLocation['latitude']!;
+        userLongitude.value = cachedLocation['longitude']!;
+        calculateQiblaDirection();
+      } else {
+        errorMessage.value = 'লোকেশন পাওয়া যায়নি';
+      }
     } finally {
       isLoading.value = false;
     }
   }
 
   void calculateQiblaDirection() {
+    if (userLatitude.value == 0.0) return;
+
     final double userLat = _degreesToRadians(userLatitude.value);
     final double userLng = _degreesToRadians(userLongitude.value);
     final double kaabaLat = _degreesToRadians(kaabaLatitude);
@@ -115,6 +126,7 @@ class QiblaController extends GetxController {
   }
 
   void startCompass() {
+    _compassSubscription?.cancel();
     _compassSubscription = FlutterCompass.events?.listen((CompassEvent event) {
       if (event.heading != null) {
         compassHeading.value = event.heading!;
@@ -123,7 +135,7 @@ class QiblaController extends GetxController {
   }
 
   double get qiblaAngle {
-    // Calculate the angle between compass heading and qibla direction
+    // Current direction relative to North
     double angle = qiblaDirection.value - compassHeading.value;
     // Normalize to -180 to 180
     if (angle < -180) angle += 360;

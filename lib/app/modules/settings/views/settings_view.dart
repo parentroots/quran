@@ -3,8 +3,22 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../controllers/settings_controller.dart';
 
-class SettingsView extends GetView<SettingsController> {
+class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
+
+  @override
+  State<SettingsView> createState() => _SettingsViewState();
+}
+
+class _SettingsViewState extends State<SettingsView> {
+  late final SettingsController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = SettingsController();
+    controller.onInit();
+  }
 
   @override
   Widget build(BuildContext context) {

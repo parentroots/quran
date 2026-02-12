@@ -4,8 +4,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../controllers/hadith_controller.dart';
 import '../../../data/models/hadith_model.dart';
 
-class HadithDetailView extends GetView<HadithController> {
+class HadithDetailView extends StatefulWidget {
   const HadithDetailView({super.key});
+
+  @override
+  State<HadithDetailView> createState() => _HadithDetailViewState();
+}
+
+class _HadithDetailViewState extends State<HadithDetailView> {
+  late final HadithController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = HadithController();
+    controller.onInit();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,15 +70,17 @@ class HadithDetailView extends GetView<HadithController> {
                           vertical: 6.h,
                         ),
                         decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor.withOpacity(0.1),
+                          color:
+                              Theme.of(context).primaryColor.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(20.r),
                         ),
                         child: Text(
                           'হাদিস ${hadith.hadithNumber}',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.bold,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ),
                       const Spacer(),
@@ -75,13 +91,20 @@ class HadithDetailView extends GetView<HadithController> {
                             vertical: 6.h,
                           ),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondary
+                                .withOpacity(0.1),
                             borderRadius: BorderRadius.circular(20.r),
                           ),
                           child: Text(
                             hadith.category!,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: Theme.of(context).colorScheme.secondary,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                 ),
                           ),
                         ),
