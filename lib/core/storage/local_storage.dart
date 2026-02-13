@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/quran_model.dart';
-import '../models/hadith_model.dart';
-import '../models/tasbeeh_history_model.dart';
+import '../../features/screens/quran/data/quran_model.dart';
+import '../../features/screens/hadith/data/hadith_model.dart';
+import '../../features/screens/tasbeeh/data/tasbeeh_history_model.dart';
 import 'storage_keys.dart';
 
 class LocalStorage {

@@ -7,7 +7,7 @@ class ApiEndpoint {
   // Quran API
   static const String quranBase = "https://api.alquran.cloud/v1";
   static const String surah = "/surah";
-  static const String edition = "/edition";
+  static const String editions = "/editions";
   static const String juz = "/juz";
   static const String page = "/page";
   static const String ayah = "/ayah";

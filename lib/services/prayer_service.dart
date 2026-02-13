@@ -1,5 +1,5 @@
 import 'dart:math' as math;
-import '../core/models/prayer_model.dart';
+import '../features/screens/prayer/data/prayer_model.dart';
 
 class PrayerService {
   // Singleton Pattern
