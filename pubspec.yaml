@@ -32,6 +32,7 @@ dependencies:
   cached_network_image: ^3.3.1
   flutter_screenutil: ^5.9.0
   scrollable_positioned_list: ^0.3.8
+  carousel_slider: ^5.1.2
 
   # Qibla & Sensors
   flutter_qiblah: ^3.2.0

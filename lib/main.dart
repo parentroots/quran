@@ -3,19 +3,17 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:islamic_app/core/dependency_injection/dependency_injection.dart';
 import 'package:timezone/data/latest.dart' as tz;
-
-import 'ui/theme/app_theme.dart';
-import 'core/di/dependency_injection.dart';
-import 'routes/app_pages.dart';
+import 'features/theme/app_theme.dart';
+import 'routes/app_rout.dart';
 import 'services/notification_service.dart';
 import 'core/storage/local_storage.dart';
 import 'services/location_service.dart';
 import 'services/tts_service.dart';
 import 'services/prayer_service.dart';
 import 'services/zakat_service.dart';
-import 'services/data_service.dart';
-import 'core/network/api_service.dart' as network;
+import 'core/network/api_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,10 +38,9 @@ void main() async {
 
 Future<void> initServices() async {
   // Initialize generic ApiService
-  await network.ApiService.init();
+  await ApiService.init();
 
   // Initialize Services
-  await Get.putAsync(() => DataService().init());
   await Get.putAsync(() => LocalStorage().init());
   await Get.putAsync(() => NotificationService().init());
   await Get.putAsync(() => LocationService().init());
@@ -69,8 +66,8 @@ class MyApp extends StatelessWidget {
           darkTheme: AppTheme.darkTheme,
           themeMode: ThemeMode.system,
           initialBinding: DependencyInjection(),
-          initialRoute: AppPages.initial,
-          getPages: AppPages.routes,
+          initialRoute: AppRoutes.initial,
+          getPages: AppRoutes.routes,
           defaultTransition: Transition.cupertino,
         );
       },

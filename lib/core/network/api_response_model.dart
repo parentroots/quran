@@ -1,10 +1,10 @@
-import '../../utils/app_strings.dart';
+import '../../utils/constant/app_strings.dart';
 
 class ApiResponseModel {
   final int? _statusCode;
-  final Map<String, dynamic>? _responseData;
+  final Map? _data;
 
-  ApiResponseModel(this._statusCode, this._responseData);
+  ApiResponseModel(this._statusCode, this._data);
 
   bool get isSuccess => _statusCode == 200;
 
@@ -14,8 +14,8 @@ class ApiResponseModel {
     if (_statusCode == 502) {
       return AppString.startServer;
     }
-    return _responseData?["message"]?.toString() ?? AppString.someThingWrong;
+    return _data?['message']?.toString() ?? AppString.someThingWrong;
   }
 
-  Map<String, dynamic> get data => _responseData ?? {};
+  Map get data => _data ?? {};
 }
